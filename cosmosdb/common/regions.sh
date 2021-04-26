@@ -1,16 +1,18 @@
-!/bin/bash
-
-# This sample shows the following:
+#!/bin/bash
+# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
+# --------------------------------------------------
+#
+# Region replica operations for an Azure Cosmos account
+#
+# Operations:
 #   Add regions to an existing Cosmos account
 #   Change regional failover priority (applies to accounts using automatic failover)
 #   Trigger a manual failover from primary to secondary region (applies to accounts with manual failover)
 
 # Note: Azure Comos accounts cannot include updates to regions with changes to other properties in the same operation
 
-# Generate a unique 10 character alphanumeric string to ensure unique resource names
-uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
-
 # Resource group and Cosmos account variables
+uniqueId=$RANDOM
 resourceGroupName="Group-$uniqueId"
 location='westus2'
 accountName="cosmos-$uniqueId" #needs to be lower case

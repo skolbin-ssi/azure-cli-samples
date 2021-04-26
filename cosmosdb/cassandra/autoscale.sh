@@ -2,9 +2,7 @@
 # Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
 # --------------------------------------------------
 #
-# Create a Cassandra keyspace and table
-#
-#
+# Create a Cassandra keyspace and table with autoscale
 
 # Variables for Cassandra API resources
 uniqueId=$RANDOM
@@ -13,6 +11,7 @@ location='westus2'
 accountName="cosmos-$uniqueId" #needs to be lower case
 keySpaceName='keyspace1'
 tableName='table1'
+maxThroughput=4000 #minimum = 4000
 
 # Create a resource group
 az group create -n $resourceGroupName -l $location
@@ -23,8 +22,7 @@ az cosmosdb create \
     -g $resourceGroupName \
     --capabilities EnableCassandra \
     --default-consistency-level Eventual \
-    --locations regionName='West US 2' failoverPriority=0 isZoneRedundant=False \
-    --locations regionName='East US 2' failoverPriority=1 isZoneRedundant=False
+    --locations regionName='West US 2' failoverPriority=0 isZoneRedundant=False 
 
 # Create a Cassandra Keyspace
 az cosmosdb cassandra keyspace create \
@@ -58,7 +56,7 @@ az cosmosdb cassandra table create \
     -g $resourceGroupName \
     -k $keySpaceName \
     -n $tableName \
-    --throughput 400 \
+    --max-throughput $maxThroughput \
     --schema @schema-$uniqueId.json
 
 # Clean up temporary schema file
